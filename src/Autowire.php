@@ -70,12 +70,10 @@ class Autowire implements AutowireInterface
             return $reflectionClass->newInstanceArgs(
                 $this->resolveParameters($class, $constructor, $parameters)
             );
+        } catch (AutowireException $t) {
+            throw $t;           
         } catch (Throwable $t) {
-            throw new AutowireException(
-                sprintf('Reflector class (%s) is not instantiable', $class),
-                0,
-                $t
-            );
+            throw new AutowireException($t->getMessage());
         }
     }
 
