@@ -1,0 +1,46 @@
+{
+    "name": "tobento/service-autowire",
+    "type": "library",
+    "description": "Autowiring for PSR-11 containers.",
+    "keywords": [
+        "tobento",
+        "package",
+        "autowiring",
+        "container",
+        "psr-11"
+	],
+    "homepage": "https://www.tobento.ch",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tobias Strub",
+            "email": "info@tobento.ch",
+            "homepage": "https://www.tobento.ch"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,    
+    "require": {
+        "php": ">=8.0",
+        "psr/container": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "vimeo/psalm": "^4.0",
+        "tobento/service-container": "^1.0"
+    },    
+    "autoload": {
+        "psr-4": {
+            "Tobento\\Service\\Autowire\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tobento\\Service\\Autowire\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --testdox --colors=always",
+        "psalm": "vendor/bin/psalm"
+    }
+}
