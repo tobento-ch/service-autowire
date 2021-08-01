@@ -94,7 +94,7 @@ var_dump($value); // string(5) "value"
 $value = (new Autowire($container))->call(Invokable::class, ['name' => 'value']);
 
 // Using Class::method syntax
-$value = (new Autowire($container))->call(Foo::method, ['name' => 'value']);
+$value = (new Autowire($container))->call('Foo::method', ['name' => 'value']);
 ```
 
 # Credits
