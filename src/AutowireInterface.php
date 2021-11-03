@@ -40,5 +40,5 @@ interface AutowireInterface
      *
      * @return mixed The result of the callable.
      */    
-    public function call(mixed $callable, array $parameters = []): mixed;   
+    public function call(mixed $callable, array $parameters = []): mixed;
 }

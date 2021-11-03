@@ -158,5 +158,16 @@ class AutowireTest extends TestCase
             null,
             $resolved->getName()
         );
+    }
+    
+    public function testContainerMethod()
+    {
+        $container = new Container();
+        $autowire = new Autowire($container);
+        
+        $this->assertSame(
+            $container,
+            $autowire->container()
+        );
     }    
 }

@@ -48,7 +48,7 @@ class Autowire implements AutowireInterface
      * @return object
      */
     public function resolve(string $class, array $parameters = []): object
-    {        
+    {
         if (!class_exists($class))
         {
             throw new AutowireException(
@@ -172,7 +172,17 @@ class Autowire implements AutowireInterface
         }
         
         throw new AutowireException('Invalid callable provided');
-    } 
+    }
+    
+    /**
+     * Returns the container.
+     *
+     * @return ContainerInterface
+     */
+    public function container(): ContainerInterface
+    {
+        return $this->container;
+    }
     
     /**
      * Resolves the parameters.
