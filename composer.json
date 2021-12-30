@@ -27,7 +27,8 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "vimeo/psalm": "^4.0",
-        "tobento/service-container": "^1.0"
+        "tobento/service-container": "^1.0",
+        "league/container": "^4.2"
     },    
     "autoload": {
         "psr-4": {
