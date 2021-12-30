@@ -282,14 +282,19 @@ class Autowire implements AutowireInterface
     {
         // A built-in type is any type that is not a class, interface, or trait.
         // We do not resolve from container.
-        if (
-            $type->isBuiltin()
-            || ! $this->container->has($type->getName())
-        ) {
+        if ($type->isBuiltin()) {
             return null;
         }
-
-        return $this->container->get($type->getName());
+        
+        if ($this->container->has($type->getName())) {
+            return $this->container->get($type->getName());
+        }
+        
+        try {
+            return $this->resolve($type->getName());   
+        } catch (AutowireException $e) {
+            return null;
+        }
     }
     
     /**
