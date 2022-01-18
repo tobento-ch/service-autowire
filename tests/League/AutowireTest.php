@@ -33,7 +33,8 @@ use Tobento\Service\Autowire\Test\Mock\{
     WithoutParameters,
     WithUnionParameter,
     WithUnionParameterAllowsNull,
-    WithUnionParameterAllowsNullNotFound
+    WithUnionParameterAllowsNullNotFound,
+    WithUnionDateTimeZone
 };
 use stdClass;
 

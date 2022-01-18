@@ -32,7 +32,8 @@ use Tobento\Service\Autowire\Test\Mock\{
     WithoutParameters,
     WithUnionParameter,
     WithUnionParameterAllowsNull,
-    WithUnionParameterAllowsNullNotFound
+    WithUnionParameterAllowsNullNotFound,
+    WithUnionDateTimeZone
 };
 use stdClass;
 
@@ -168,6 +169,19 @@ class AutowireTest extends TestCase
         $this->assertSame(
             $container,
             $autowire->container()
+        );
+    }
+    
+    public function testWithUnionDateTimeZone()
+    {
+        $container = new Container();
+        $autowire = new Autowire($container);
+        
+        $resolved = $this->autowire()->resolve(WithUnionDateTimeZone::class);
+        
+        $this->assertInstanceof(
+            WithUnionDateTimeZone::class,
+            $resolved
         );
     }    
 }
