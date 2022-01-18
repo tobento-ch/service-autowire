@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Tobento\Service\Autowire;
 
 use Psr\Container\ContainerInterface;
+use Psr\Container\ContainerExceptionInterface;
 use ReflectionClass;
 use ReflectionFunctionAbstract;
 use ReflectionFunction;
@@ -286,13 +287,15 @@ class Autowire implements AutowireInterface
             return null;
         }
         
-        if ($this->container->has($type->getName())) {
-            return $this->container->get($type->getName());
-        }
-        
         try {
-            return $this->resolve($type->getName());   
+            if ($this->container->has($type->getName())) {
+                return $this->container->get($type->getName());
+            }
+            
+            return $this->resolve($type->getName());
         } catch (AutowireException $e) {
+            return null;
+        } catch (ContainerExceptionInterface $e) {
             return null;
         }
     }
