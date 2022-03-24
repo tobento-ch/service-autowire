@@ -27,6 +27,7 @@ use Tobento\Service\Autowire\Test\Mock\{
     WithBuildInParameterOptional,
     WithBuildInParameterAllowsNull,
     WithBuildInParameterAndClasses,
+    WithSplatParameter,
     WithParameter,
     WithParameters,
     WithoutParameters,
@@ -130,6 +131,14 @@ class AutowireTest extends TestCase
             $this->autowire()->resolve(WithParameters::class)
         );
     }
+    
+    public function testWithSplatParameter()
+    {        
+        $this->assertInstanceOf(
+            WithSplatParameter::class,
+            $this->autowire()->resolve(WithSplatParameter::class)
+        );
+    }    
     
     public function testWithUnionParameterResolvesFirstFound()
     {

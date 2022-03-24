@@ -207,8 +207,14 @@ class Autowire implements AutowireInterface
         $resolved = [];
             
         foreach($function->getParameters() as $parameter)
-        {            
-            $resolved[] = $this->resolveParameter($id, $parameter, $parameters);
+        {
+            $value = $this->resolveParameter($id, $parameter, $parameters);
+            
+            if ($value === '__variadic') {
+                continue;
+            }
+            
+            $resolved[] = $value;
         }
 
         return $resolved;
@@ -255,15 +261,21 @@ class Autowire implements AutowireInterface
         }
 
         // Handle optional parameters.
-        if ($parameter->isDefaultValueAvailable() || $parameter->isOptional())
+        if ($parameter->isDefaultValueAvailable())
         {
             return $parameter->getDefaultValue();
         }
-        
-        // Lastly, check if parameters allows null.
+                
+        // Check if parameters allows null.
         if ($parameter->allowsNull())
         {
             return null;
+        }
+        
+        // Lastly, check if variadic parameter.
+        if ($parameter->isVariadic())
+        {
+            return '__variadic';
         }        
         
         throw new AutowireException(sprintf(

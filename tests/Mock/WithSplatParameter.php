@@ -13,7 +13,16 @@ declare(strict_types=1);
 
 namespace Tobento\Service\Autowire\Test\Mock;
 
-class Foo implements FooInterface
+class WithSplatParameter
 {
-    //
+    /**
+     * @var array
+     */
+    protected array $foos = []; 
+    
+    public function __construct(
+        FooInterface ...$foo
+    ) {
+        $this->foos = $foo;
+    }
 }
