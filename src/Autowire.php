@@ -208,81 +208,64 @@ class Autowire implements AutowireInterface
             
         foreach($function->getParameters() as $parameter)
         {
-            $value = $this->resolveParameter($id, $parameter, $parameters);
-            
-            if ($value === '__variadic') {
+            // Resolve by parameters.
+            if ($this->hasMatchedParameter($parameter, $parameters))
+            {
+                $resolved[] = $this->getMatchedParameter($parameter, $parameters);
                 continue;
             }
             
-            $resolved[] = $value;
+            // Resolve by type.
+            $type = $parameter->getType();
+
+            if (
+                $type instanceof ReflectionNamedType
+                && !is_null($solved = $this->resolveNamedType($type))
+            ){
+                $resolved[] = $solved;
+                continue;
+            }
+
+            if ($type instanceof ReflectionUnionType)
+            {
+                foreach($type->getTypes() as $namedType)
+                {
+                    if (!is_null($solved = $this->resolveNamedType($namedType)))
+                    {
+                        $resolved[] = $solved;
+                        continue 2;
+                    }
+                }
+            }
+            
+            // Handle optional parameters.
+            if ($parameter->isDefaultValueAvailable())
+            {
+                $resolved[] = $parameter->getDefaultValue();
+                continue;
+            }
+
+            // Check if parameters allows null.
+            if ($parameter->allowsNull())
+            {
+                $resolved[] = null;
+                continue;
+            }
+
+            // Lastly, check if variadic parameter.
+            if ($parameter->isVariadic())
+            {
+                continue;
+            }        
+
+            throw new AutowireException(sprintf(
+                'Parameter $%s of %s is not resolvable',
+                $parameter->getName(),
+                $id        
+            ));
         }
 
         return $resolved;
-    }
-    
-    /**
-     * Resolves the parameters.
-     * 
-     * @param string $id
-     * @param ReflectionParameter $parameter
-     * @param array<int|string, mixed> $parameters
-     * @return mixed The resolved parameter.
-     */
-    private function resolveParameter(
-        string $id,
-        ReflectionParameter $parameter,
-        array $parameters = []
-    ): mixed {
-        // Resolve by parameters.
-        if ($this->hasMatchedParameter($parameter, $parameters))
-        {
-            return $this->getMatchedParameter($parameter, $parameters);
-        }
-        
-        // Resolve by type.
-        $type = $parameter->getType();
-
-        if (
-            $type instanceof ReflectionNamedType
-            && !is_null($resolved = $this->resolveNamedType($type))
-        ){
-            return $resolved;
-        }
-        
-        if ($type instanceof ReflectionUnionType)
-        {
-            foreach($type->getTypes() as $namedType)
-            {
-                if (!is_null($resolved = $this->resolveNamedType($namedType)))
-                {
-                    return $resolved;
-                }
-            }
-        }
-
-        // Handle optional parameters.
-        if ($parameter->isDefaultValueAvailable())
-        {
-            return $parameter->getDefaultValue();
-        }
-                
-        // Check if parameters allows null.
-        if ($parameter->allowsNull())
-        {
-            return null;
-        }
-        
-        // Lastly, check if variadic parameter.
-        if ($parameter->isVariadic())
-        {
-            return '__variadic';
-        }        
-        
-        throw new AutowireException(sprintf(
-            'Parameter $%s of %s is not resolvable',
-            $parameter->getName(),
-            $id        
-        ));
     }
 
     /**
