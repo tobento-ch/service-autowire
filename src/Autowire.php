@@ -72,9 +72,9 @@ class Autowire implements AutowireInterface
                 $this->resolveParameters($class, $constructor, $parameters)
             );
         } catch (AutowireException $t) {
-            throw $t;           
+            throw $t;
         } catch (Throwable $t) {
-            throw new AutowireException($t->getMessage());
+            throw new AutowireException($t->getMessage(), 0, $t);
         }
     }
 
