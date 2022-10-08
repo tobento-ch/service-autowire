@@ -22,7 +22,6 @@ use ReflectionParameter;
 use ReflectionNamedType;
 use ReflectionUnionType;
 use Closure;
-use Throwable;
 
 /**
  * Autowire
@@ -73,8 +72,6 @@ class Autowire implements AutowireInterface
             );
         } catch (AutowireException $t) {
             throw $t;
-        } catch (Throwable $t) {
-            throw new AutowireException($t->getMessage(), 0, $t);
         }
     }
 
