@@ -105,7 +105,12 @@ class Autowire implements AutowireInterface
             } else {
                 $callable = [$callable];
             }
-        }        
+        }
+        
+        if (is_object($callable) && is_callable($callable))
+        {
+            $callable = [$callable];
+        }
         
         if (is_array($callable))
         {
