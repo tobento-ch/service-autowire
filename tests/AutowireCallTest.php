@@ -85,6 +85,16 @@ class AutowireCallTest extends TestCase
                 Invokable::class
             )
         );
+    }
+    
+    public function testClassObjectGetsInvoked()
+    {
+        $this->assertSame(
+            'invoked',
+            $this->autowire()->call(
+                new Invokable(new Foo())
+            )
+        );
     }    
     
     public function testClosureWithParametersGetsAutowired()
