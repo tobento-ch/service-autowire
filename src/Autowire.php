@@ -34,7 +34,7 @@ class Autowire implements AutowireInterface
      * @param ContainerInterface $container
      */
     public function __construct(
-        protected ContainerInterface $container
+        protected readonly ContainerInterface $container
     ) {}
     
     /**
