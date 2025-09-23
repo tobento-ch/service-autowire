@@ -13,37 +13,14 @@ declare(strict_types=1);
 
 namespace Tobento\Service\Autowire\Test\League;
 
-use Tobento\Service\Autowire\Test\AutowireWithParametersTest as BaseAutowireWithParametersTest;
-use Tobento\Service\Autowire\Autowire;
-use Tobento\Service\Autowire\AutowireInterface;
-use Tobento\Service\Autowire\AutowireException;
-use Tobento\Service\Container\Container;
 use League\Container\Container as LeagueContainer;
-use Tobento\Service\Autowire\Test\Mock\{
-    Foo,
-    Bar,
-    Baz,
-    FooInterface,
-    WithBuildInParameter,
-    WithBuildInParameterOptional,
-    WithBuildInParameterAllowsNull,
-    WithBuildInParameterAndClasses,
-    WithParameter,
-    WithParameters,
-    WithoutParameters,
-    WithUnionParameter,
-    WithUnionParameterAllowsNull,
-    WithUnionParameterAllowsNullNotFound
-};
-use stdClass;
+use Psr\Container\ContainerInterface;
+use Tobento\Service\Autowire\Test\AutowireWithParameters;
 
-/**
- * AutowireWithParametersTest tests
- */
-class AutowireWithParametersTest extends BaseAutowireWithParametersTest
+class AutowireWithParametersTest extends AutowireWithParameters
 {
-    protected function autowire(): AutowireInterface
+    protected function container(): ContainerInterface
     {
-        return new Autowire(new LeagueContainer());
+        return new LeagueContainer();
     }
 }
