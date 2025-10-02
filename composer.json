@@ -1,6 +1,6 @@
 {
     "name": "tobento/service-autowire",
-    "version": "2.0",
+    "version": "2.0.1",
     "type": "library",
     "description": "Autowiring for PSR-11 containers.",
     "keywords": [
