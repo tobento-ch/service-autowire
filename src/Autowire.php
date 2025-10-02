@@ -13,19 +13,17 @@ declare(strict_types=1);
 
 namespace Tobento\Service\Autowire;
 
+use Closure;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionFunction;
 use ReflectionParameter;
 use ReflectionNamedType;
 use ReflectionUnionType;
-use Closure;
 
-/**
- * Autowire
- */
 class Autowire implements AutowireInterface
 {
     /**
@@ -219,10 +217,10 @@ class Autowire implements AutowireInterface
             
             // Resolve by type.
             $type = $parameter->getType();
-
+            
             if (
                 $type instanceof ReflectionNamedType
-                && !is_null($solved = $this->resolveNamedType($type))
+                && !is_null($solved = $this->resolveNamedType($type, $parameter))
             ){
                 $resolved[] = $solved;
                 continue;
@@ -232,7 +230,7 @@ class Autowire implements AutowireInterface
             {
                 foreach($type->getTypes() as $namedType)
                 {
-                    if (!is_null($solved = $this->resolveNamedType($namedType)))
+                    if (!is_null($solved = $this->resolveNamedType($namedType, $parameter)))
                     {
                         $resolved[] = $solved;
                         continue 2;
@@ -274,14 +272,28 @@ class Autowire implements AutowireInterface
      * Resolves the named type from the container.
      *
      * @param ReflectionNamedType $type
+     * @param ReflectionParameter $parameter
      * @return mixed The resolved value, otherwise null
      */
-    private function resolveNamedType(ReflectionNamedType $type): mixed
+    private function resolveNamedType(ReflectionNamedType $type, ReflectionParameter $parameter): mixed
     {
         // A built-in type is any type that is not a class, interface, or trait.
         // We do not resolve from container.
         if ($type->isBuiltin()) {
             return null;
+        }
+        
+        // check for enum:
+        try {
+            if (new ReflectionClass($type->getName())->isEnum()) {
+                if ($parameter->isDefaultValueAvailable()) {
+                    return $parameter->getDefaultValue();
+                }
+
+                return $type->getName()::cases()[0];
+            }
+        } catch (ReflectionException $e) {
+            // ignore
         }
         
         try {
