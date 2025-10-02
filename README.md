@@ -38,10 +38,10 @@ Here is a simple example of how to use the Autowire service.
 use Tobento\Service\Autowire\Autowire;
 
 // Autowiring an object
-$foo = (new Autowire($container))->resolve(Foo::class);
+$foo = new Autowire($container)->resolve(Foo::class);
 
 // Call method using autowiring
-$value = (new Autowire($container))->call([Foo::class, 'method']);
+$value = new Autowire($container)->call([Foo::class, 'method']);
 ```
 
 # Documentation
@@ -54,10 +54,10 @@ Define any build-in parameters which are not resolvable, either by parameter nam
 use Tobento\Service\Autowire\Autowire;
 
 // By name
-$foo = (new Autowire($container))->resolve(Foo::class, ['name' => 'value']);
+$foo = new Autowire($container)->resolve(Foo::class, ['name' => 'value']);
 
 // By position
-$foo = (new Autowire($container))->resolve(Foo::class, [2 => 'value']);
+$foo = new Autowire($container)->resolve(Foo::class, [2 => 'value']);
 ```
 
 You might use a try/catch block:
@@ -67,7 +67,7 @@ use Tobento\Service\Autowire\Autowire;
 use Tobento\Service\Autowire\AutowireException;
 
 try {
-    $foo = (new Autowire($container))->resolve([Foo::class, 'method']);
+    $foo = new Autowire($container)->resolve([Foo::class, 'method']);
 } catch (AutowireException $e) {
     // not resolvable
 }
@@ -81,20 +81,20 @@ Define any build-in parameters which are not resolvable, either by parameter nam
 use Tobento\Service\Autowire\Autowire;
 
 // Using array callable
-$value = (new Autowire($container))->call([Foo::class, 'method'], ['name' => 'value']);
+$value = new Autowire($container)->call([Foo::class, 'method'], ['name' => 'value']);
 
 // Using closure
-$value = (new Autowire($container))->call(function(Foo $foo, $name) {
+$value = new Autowire($container)->call(function(Foo $foo, $name) {
     return $name;
 }, ['name' => 'value']);
 
 var_dump($value); // string(5) "value"
 
 // Using class with __invoke
-$value = (new Autowire($container))->call(Invokable::class, ['name' => 'value']);
+$value = new Autowire($container)->call(Invokable::class, ['name' => 'value']);
 
 // Using Class::method syntax
-$value = (new Autowire($container))->call('Foo::method', ['name' => 'value']);
+$value = new Autowire($container)->call('Foo::method', ['name' => 'value']);
 ```
 
 # Credits
